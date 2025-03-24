@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Task Manager</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        .task {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        .task.completed {
+            background-color: #f0fff0;
+        }
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+        }
+        .task-title {
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        .completed .task-title {
+            text-decoration: line-through;
+        }
+        .task-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .task-actions a {
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            color: white;
+        }
+        .toggle-btn {
+            background-color: #4CAF50;
+        }
+        .delete-btn {
+            background-color: #f44336;
+        }
+        .add-task-form {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .form-row {
+            margin-bottom: 10px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"], textarea, input[type="date"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+        button[type="submit"] {
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Task Manager</h1>
+    
+    <!-- Add Task Form -->
+    <div class="add-task-form">
+        <h2>Add New Task</h2>
+        <form th:action="@{/tasks}" method="post">
+            <div class="form-row">
+                <label for="title">Title:</label>
+                <input type="text" id="title" name="title" required>
+            </div>
+            <div class="form-row">
+                <label for="description">Description:</label>
+                <textarea id="description" name="description" rows="3"></textarea>
+            </div>
+            <div class="form-row">
+                <label for="dueDate">Due Date:</label>
+                <input type="date" id="dueDate" name="dueDate" required>
+            </div>
+            <button type="submit">Add Task</button>
+        </form>
+    </div>
+    
+    <!-- Task List -->
+    <h2>Your Tasks</h2>
+    <div th:if="${tasks.empty}">
+        <p>No tasks found. Add your first task above!</p>
+    </div>
+    <div th:each="task : ${tasks}" th:class="${task.completed ? 'task completed' : 'task'}">
+        <div class="task-header">
+            <span class="task-title" th:text="${task.title}">Task Title</span>
+            <div class="task-actions">
+                <a th:href="@{/tasks/{id}/toggle(id=${task.id})}" class="toggle-btn">
+                    <span th:text="${task.completed ? 'Mark Incomplete' : 'Mark Complete'}">Toggle</span>
+                </a>
+                <a th:href="@{/tasks/{id}/delete(id=${task.id})}" class="delete-btn">Delete</a>
+            </div>
+        </div>
+        <p th:text="${task.description}">Task Description</p>
+        <p>Due: <span th:text="${#temporals.format(task.dueDate, 'MMM dd, yyyy')}">Due Date</span></p>
+    </div>
+</body>
+</html>
