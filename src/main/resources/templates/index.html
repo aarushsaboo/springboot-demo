@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Simple Demo</title>
+</head>
+<body>
+    <h1>Items List</h1>
+    
+    <ul>
+        <li th:each="item : ${items}" th:text="${item.name}"></li>
+    </ul>
+    
+    <h2>Add New Item</h2>
+    <form action="/add" method="post">
+        <input type="text" name="name" placeholder="Item name">
+        <button type="submit">Add</button>
+    </form>
+</body>
+</html>
