@@ -22,7 +22,7 @@ public class ItemController {
     @GetMapping("/")
     public String index(Model model) {
         model.addAttribute("items", itemService.getAllItems());
-        model.addAttribute("newItem", new Item());
+        // model.addAttribute("newItem", new Item());
         return "index";
     }
     
